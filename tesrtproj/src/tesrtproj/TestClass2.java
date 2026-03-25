@@ -113,7 +113,7 @@ class TestClass2 {
 		// ALSO -- Backloading deliveries could cause issues because of the whole "its not a deadline, its a singular event timeslot", BUT -- the key realisation is that deliveryTimes are DISTINCT, so there's never an overlap, which means backloading them is not a risk.
 		
 		
-		
+		System.out.println("Last checkpoint before trying Claude's Scheduler Assistance");
 		
 		
 		
