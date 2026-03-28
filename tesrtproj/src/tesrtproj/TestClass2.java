@@ -119,11 +119,26 @@ class TestClass2 {
 		
 		
 		
+		// Feasibility check:
 		
+		/// assign each cake to its latest deadline <= T.
+		// make sure target time T is not smaller than any cake's both delivery time options.
 		
+		// step through list of deadlines you prepared.
 		
+		// POP first deadline cake to heap.
 		
+		// check every slack by calculating time between current time (prep finished of cake 1, not its deadline) and that cake's own deadline.
 		
+		// pick cake with lowest slack to pop from heap?
+		
+		// ???
+		
+		// max heap brings cake with NEXT DEADLINE to top of heap because these have the highest urgency to finish before their deadline.
+				
+		// between the new time that this cake has finished prep, get a new gap for the next highest 'latest deadline', repeat steps above.
+		
+		// if we reach a point where the current time + the cake with the lowest slack exceeds T (aka the next cake has negative slack), abandon schedule.
 		
 		
 		
