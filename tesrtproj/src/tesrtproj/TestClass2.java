@@ -141,8 +141,72 @@ class TestClass2 {
 		// if we reach a point where the current time + the cake with the lowest slack exceeds T (aka the next cake has negative slack), abandon schedule.
 		
 		
+		/*
+		* pop next deadline cake.
+		* free hours = cake deadline - current time (aka. slack)
+		* if prepTime <= freeHours, cake is next in schedule.
+		* else,
+		* schedule is abandoned.
+		*/
 		
 		
+		// ------------------------ max heap setup
+		
+		// Creating empty priority queue
+        int targetIndex = 0; // order by element at index 0
+
+        PriorityQueue<int[]> maxHeap = new PriorityQueue<>(
+            (a, b) -> b[targetIndex] - a[targetIndex]  // descending = max heap
+        );
+		
+		
+		// ------------------------- my stuff
+		
+		
+        List<int[]> cakes = new ArrayList<>(); // for clarity, represent each cake as a pairing of latest delivery time and preparation time.
+        int cakeIndex = 0;
+        
+        for (Integer i : preparationTimes) {
+        	cakes.add(new int[]{deliveryHours.get(cakeIndex).get(-1), i}); // get the latest of the two delivery hours and use as index.
+        	System.out.println(cakes.get(-1));
+        	cakeIndex++;
+        }
+        
+        
+        // ------------------------- testing
+        
+        
+        // Printing the most priority element
+        System.out.println("Head value using peek function:"
+                           + maxHeap.peek());
+
+        // Printing all elements
+        System.out.println("The queue elements:");
+        Iterator itr = maxHeap.iterator();
+        while (itr.hasNext())
+            System.out.println(itr.next());
+        
+        /*
+        // Removing the top priority element (or head) and
+        // printing the modified pQueue using poll()
+        maxHeap.poll();
+        System.out.println("After removing an element "
+                           + "with poll function:");
+        Iterator<Integer> itr2 = maxHeap.iterator();
+        while (itr2.hasNext())
+            System.out.println(itr2.next());
+        */
+        
+        // ----------------------- feasibility check code :
+        
+        
+        
+        
+        System.out.println("wait we dont even need a heap anymroe if we're not ordering by slackj");
+        
+        
+        
+
 		
 		return false;
 	}
