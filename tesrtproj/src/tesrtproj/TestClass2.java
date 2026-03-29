@@ -1,5 +1,6 @@
 package tesrtproj;
 
+
 import java.io.*; 
 import java.math.*; 
 import java.security.*; 
@@ -113,11 +114,6 @@ class TestClass2 {
 		// ALSO -- Backloading deliveries could cause issues because of the whole "its not a deadline, its a singular event timeslot", BUT -- the key realisation is that deliveryTimes are DISTINCT, so there's never an overlap, which means backloading them is not a risk.
 		
 		
-		System.out.println("Last checkpoint before trying Claude's Scheduler Assistance");
-		
-		
-		
-		
 		
 		// Feasibility check:
 		
@@ -150,65 +146,51 @@ class TestClass2 {
 		*/
 		
 		
-		// ------------------------ max heap setup
-		
-		// Creating empty priority queue
-        int targetIndex = 0; // order by element at index 0
-
-        PriorityQueue<int[]> maxHeap = new PriorityQueue<>(
-            (a, b) -> b[targetIndex] - a[targetIndex]  // descending = max heap
-        );
-		
-		
-		// ------------------------- my stuff
+		// ------------------------- set up ordered list of deadlines to iterate through.
 		
 		
         List<int[]> cakes = new ArrayList<>(); // for clarity, represent each cake as a pairing of latest delivery time and preparation time.
         int cakeIndex = 0;
         
         for (Integer i : preparationTimes) {
-        	cakes.add(new int[]{deliveryHours.get(cakeIndex).get(-1), i}); // get the latest of the two delivery hours and use as index.
-        	System.out.println(cakes.get(-1));
+        	cakes.add(new int[]{deliveryHours.get(cakeIndex).get(deliveryHours.get(cakeIndex).size()-1), i}); // get the latest of the two delivery hours and use as index.
+        	System.out.println(cakes.get(cakes.size()-1));
         	cakeIndex++;
         }
         
+        cakes.sort(
+        		(a, b) -> a[0] - b[0]
+        );
         
-        // ------------------------- testing
-        
-        
-        // Printing the most priority element
-        System.out.println("Head value using peek function:"
-                           + maxHeap.peek());
-
-        // Printing all elements
-        System.out.println("The queue elements:");
-        Iterator itr = maxHeap.iterator();
-        while (itr.hasNext())
-            System.out.println(itr.next());
-        
-        /*
-        // Removing the top priority element (or head) and
-        // printing the modified pQueue using poll()
-        maxHeap.poll();
-        System.out.println("After removing an element "
-                           + "with poll function:");
-        Iterator<Integer> itr2 = maxHeap.iterator();
-        while (itr2.hasNext())
-            System.out.println(itr2.next());
-        */
         
         // ----------------------- feasibility check code :
         
+        /*
+         * While cakes != empty:
+         * add cake with earliest deadline to scheduledCake list.
+         * if time between now and its deadline > 0:	
+         * 		calculate slack for all cakes at index > i.
+         * 		remove cake with lowest slack
+         * 		add it to the scheduledCake list.
+         * 		if no more cakes can fit, start on cake with next deadline
+         */
         
+        // wrong. dont need to pick cake based on slack.
         
-        
-        System.out.println("wait we dont even need a heap anymroe if we're not ordering by slackj");
-        
-        
-        
-
+        int currentTime = 0;
+		for (int i = 0; i < cakes.size(); i++) { // for each cake in sorted order:
+		    	int deadline = cakes.get(i)[0]; // deadline = cake[0]
+		    	int prepNeeded = cakes.get(i)[1];	// prepNeeded = cake[1]
+		    	int freeHours = deadline - currentTime - 1;  // -1 because delivery takes the deadline hour itself
+				if (prepNeeded <= freeHours) {
+					currentTime += prepNeeded; // spend those prep hours
+				}
+				else {
+					return false; // not enough room
+				}
+		}
+		return true;
 		
-		return false;
 	}
 }
 
@@ -270,12 +252,6 @@ class TestClass2 {
 		
 		// return 0;		
 //
-
-
-
-
-
-
 
 
 
