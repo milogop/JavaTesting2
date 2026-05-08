@@ -74,13 +74,6 @@ public class TestClass2 {
 	public static int getMinimumHours(List<List<Integer>> deliveryHours, List<Integer> preparationTimes) {
 		
 		
-		// instead of a trial and error step-forward approach, lets pick a target hour to try and deliver all cakes by, then loop closer to correct 'minimum time' after each schedule feasibility calculation.
-		
-		// yes this will be computationally expensive but unlike a heuristic approach this one will guarantee the correct answer is reached, at least.
-		
-		// we can use binary search instead of an exhaustive loop because the hours are technically 'ordered' in that all hours before the target will fail and all hours after will be successful (but not the minimum).
-		
-		
 		int min = 1;
 		int max = 1000000000; // 10^9 is upper bound.
 		
@@ -112,25 +105,25 @@ public class TestClass2 {
 		
 
 		
-		// ------------------------- set up ordered list of deadlines to iterate through.
-			
-			
+	// ------------------------- set up ordered list of deadlines to iterate through.
+		
+		
         List<int[]> cakes = new ArrayList<>(); // for clarity, represent each cake as a pairing of latest delivery time and preparation time.
         int cakeIndex = 0;
-	        
-		/*
-	        for (Integer i : preparationTimes) {
-	        	cakes.add(new int[]{deliveryHours.get(cakeIndex).get(deliveryHours.get(cakeIndex).size()-1), i}); // get the latest of the two delivery hours and use as index.
-	        	//System.out.println(cakes.get(cakes.size()-1));
-	        	cakeIndex++;
-	        }
-	        
-	        cakes.sort(
-	        		(a, b) -> a[0] - b[0]
-	        );
-		*/
+        
+	/*
+        for (Integer i : preparationTimes) {
+        	cakes.add(new int[]{deliveryHours.get(cakeIndex).get(deliveryHours.get(cakeIndex).size()-1), i}); // get the latest of the two delivery hours and use as index.
+        	//System.out.println(cakes.get(cakes.size()-1));
+        	cakeIndex++;
+        }
+        
+        cakes.sort(
+        		(a, b) -> a[0] - b[0]
+        );
+	*/
 
-		// NEW VERSION
+        // NEW VERSION
         for (Integer prep : preparationTimes) {
     		List<Integer> slots = deliveryHours.get(cakeIndex);
     		int latestValid = -1;
@@ -142,13 +135,13 @@ public class TestClass2 {
     		if (latestValid == -1) {
     			return false; // no valid slot for this cake
     		}
-		cakes.add(new int[]{latestValid, prep});
-   		cakeIndex++;
+			cakes.add(new int[]{latestValid, prep});
+	   		cakeIndex++;
 		}
-
+	
 		cakes.sort(
-        		(a, b) -> a[0] - b[0]
-        );
+	        		(a, b) -> a[0] - b[0]
+	        );
         
         // ----------------------- feasibility check code :
         
@@ -160,7 +153,7 @@ public class TestClass2 {
 		    	int prepNeeded = cakes.get(i)[1];	// prepNeeded = cake[1]
 		    	freeHours += deadline - currentTime - 1;  // -1 because delivery takes the deadline hour itself
 				if (prepNeeded <= freeHours) {
-					currentTime = deadline; // += prepNeeded + 1; // spend those prep hours
+					currentTime = deadline; // spend prep hours
 				}
 				else {
 					return false; // not enough room
